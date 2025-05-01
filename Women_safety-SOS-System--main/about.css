@@ -398,7 +398,7 @@ p {
         font-size: 0.9rem;
     }
 }
-// make responsive for mobile
+ /* make responsive for mobile */
 @media (max-width: 320px) {
     .hero-content h1 {
         font-size: 1.5rem;
