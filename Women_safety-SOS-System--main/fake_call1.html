@@ -1,61 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FakeCall</title>
-    <link rel="stylesheet" href="fake_call1.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FakeCall</title>
+  <link rel="stylesheet" href="fake_call1.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" defer></script>
 </head>
 <body>
-    <audio id="ringtone" src="iphone_ringtone.mp3" preload="auto"></audio>
+  <audio id="ringtone" src="iphone_ringtone.mp3" preload="auto"></audio>
 
-    <script>
-        let ringtone = document.getElementById("ringtone");
-
-        window.onload = function() {
-            if (!localStorage.getItem("callAnswered")) {
-                ringtone.play().catch(error => console.log("Autoplay blocked: " + error));
-            }
-        };
-
-        function stopRingtone() {
-            ringtone.pause();
-            ringtone.currentTime = 0;
-            localStorage.setItem("callAnswered", "true"); // Mark call as answered
-        }
-    </script>
-
-    <div class="phone-frame">
-        <div class="notch">
-            <div class="status-bar">
-                <span class="time">10:15</span>
-                <span class="icons">
-                    <i class="fa-solid fa-signal"></i>
-                    <i class="fa-solid fa-wifi"></i>
-                    <i class="fa-solid fa-battery-three-quarters"></i>
-                </span>
-            </div>
-        </div>
-
-        <div class="call-screen">
-            <div class="caller-info">
-                <h2>+91 75057 61152</h2>
-                <h6>Uttar Pradesh (East) Mobile Telephony</h6>
-                <p>Incoming Call...</p>
-            </div>
-
-            <div class="avatar">
-                <i class="fa-solid fa-user"></i>
-            </div>
-
-            <div class="buttons">
-                <a href="dashboard.html" class="decline"><i class="fa-solid fa-phone-slash"></i></a>
-                <a href="fake_call2.html" class="answer" onclick="stopRingtone()">
-                    <i class="fa-solid fa-phone"></i>
-                </a>
-            </div>
-        </div>
+  <div class="phone-frame" role="dialog" aria-label="Incoming call screen">
+    <div class="notch">
+      <div class="status-bar">
+        <span class="time" aria-label="Current time">10:15</span>
+        <span class="icons" aria-label="Phone status indicators">
+          <i class="fa-solid fa-signal" aria-hidden="true"></i>
+          <i class="fa-solid fa-wifi" aria-hidden="true"></i>
+          <i class="fa-solid fa-battery-three-quarters" aria-hidden="true"></i>
+        </span>
+      </div>
     </div>
+
+    <div class="call-screen">
+      <div class="caller-info">
+        <h2 class="phone-number">+91 75057 61152</h2>
+        <h6 class="location">Uttar Pradesh (East) Mobile Telephony</h6>
+        <p class="incoming-status">Incoming Call...</p>
+      </div>
+
+      <div class="avatar" aria-label="Caller avatar">
+        <i class="fa-solid fa-user fa-3x" aria-hidden="true"></i>
+      </div>
+
+      <div class="buttons" aria-label="Call options">
+        <a href="dashboard.html" class="decline" aria-label="Decline call">
+          <i class="fa-solid fa-phone-slash"></i>
+        </a>
+        <a href="fake_call2.html" class="answer" onclick="stopRingtone()" aria-label="Answer call">
+          <i class="fa-solid fa-phone"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ringtone = document.getElementById("ringtone");
+
+    window.addEventListener("load", () => {
+      if (!localStorage.getItem("callAnswered")) {
+        const playPromise = ringtone.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(err =>
+            console.warn("Autoplay blocked or failed:", err.message)
+          );
+        }
+      }
+    });
+
+    function stopRingtone() {
+      if (!ringtone.paused) {
+        ringtone.pause();
+        ringtone.currentTime = 0;
+      }
+      localStorage.setItem("callAnswered", "true");
+    }
+  </script>
 </body>
 </html>
